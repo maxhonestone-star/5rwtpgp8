@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Generator - YouTube & TikTok</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="description" content="Generate prompts for YouTube & TikTok content with offline image generation">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎬 Prompt Generator</h1>
+            <p>YouTube & TikTok Content Creator Tool</p>
+            <button id="darkModeToggle" class="icon-btn" aria-label="Toggle dark mode">
+                <span>🌙</span>
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="prompt">📝 Prompt Generator</button>
+                <button class="tab" data-tab="image">🖼️ Image Generator</button>
+            </div>
+
+            <!-- Prompt Generator Section -->
+            <section id="promptSection" class="section active">
+                <div class="card">
+                    <h2>Generate Content Prompts</h2>
+                    
+                    <form id="promptForm">
+                        <div class="form-group">
+                            <label for="category">Kategori</label>
+                            <select id="category" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="hook">💥 Hook Ideas</option>
+                                <option value="script">📜 Video Script</option>
+                                <option value="caption">💬 Caption</option>
+                                <option value="title">🎯 Video Title</option>
+                                <option value="hashtags">#️⃣ Hashtag Suggestions</option>
+                                <option value="thumbnail">🖼️ Thumbnail Ideas</option>
+                                <option value="content">💡 Content Ideas</option>
+                                <option value="cta">📣 Call-to-Action</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="topic">Topik / Niche</label>
+                            <input type="text" id="topic" placeholder="Contoh: Teknologi, Kuliner, Gaming, Edukasi" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tone">Gaya / Tone</label>
+                            <select id="tone">
+                                <option value="casual">😊 Casual</option>
+                                <option value="professional">👔 Professional</option>
+                                <option value="funny">😄 Funny</option>
+                                <option value="educational">📚 Educational</option>
+                                <option value="inspiring">✨ Inspiring</option>
+                                <option value="controversial">🔥 Controversial</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="platform">Platform</label>
+                            <select id="platform">
+                                <option value="youtube">📺 YouTube</option>
+                                <option value="tiktok">🎵 TikTok</option>
+                                <option value="both">🎬 Both</option>
+                            </select>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="submit" class="btn btn-primary">
+                                <span>🔄 Generate</span>
+                            </button>
+                            <button type="button" id="clearPrompt" class="btn btn-secondary">
+                                <span>🗑️ Clear</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Output -->
+                    <div id="promptOutput" class="output-container">
+                        <div class="output-header">
+                            <h3>Generated Prompt</h3>
+                            <button id="copyPrompt" class="btn-icon" title="Copy to clipboard">
+                                📋
+                            </button>
+                        </div>
+                        <div id="promptText" class="output-text">
+                            <p class="placeholder">Generated prompt will appear here...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Image Generator Section -->
+            <section id="imageSection" class="section">
+                <div class="card">
+                    <h2>Generate Images Offline</h2>
+                    
+                    <div class="image-tabs">
+                        <button class="image-tab active" data-imageTab="textToImage">Text → Image</button>
+                        <button class="image-tab" data-imageTab="imageToText">Image → Text</button>
+                    </div>
+
+                    <!-- Text to Image -->
+                    <div id="textToImage" class="image-section active">
+                        <form id="imageForm">
+                            <div class="form-group">
+                                <label for="imageText">Teks untuk Gambar</label>
+                                <textarea id="imageText" rows="3" placeholder="Masukkan teks utama untuk gambar" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="template">Template</label>
+                                <select id="template">
+                                    <option value="thumbnail-youtube">📺 YouTube Thumbnail</option>
+                                    <option value="thumbnail-tiktok">🎵 TikTok Cover</option>
+                                    <option value="quote">💬 Quote Card</option>
+                                    <option value="announcement">📢 Announcement</option>
+                                    <option value="minimal">✨ Minimal</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="backgroundColor">Background Color</label>
+                                <input type="color" id="backgroundColor" value="#6366f1">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="textColor">Text Color</label>
+                                <input type="color" id="textColor" value="#ffffff">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fontSize">Ukuran Font</label>
+                                <input type="range" id="fontSize" min="20" max="80" value="48">
+                                <span id="fontSizeValue">48px</span>
+                            </div>
+
+                            <div class="button-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <span>🎨 Generate Image</span>
+                                </button>
+                                <button type="button" id="clearImage" class="btn btn-secondary">
+                                    <span>🗑️ Clear</span>
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Canvas -->
+                        <div class="canvas-container">
+                            <canvas id="imageCanvas" width="1280" height="720"></canvas>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div id="imageOutput" class="output-container">
+                            <div class="output-header">
+                                <h3>Preview</h3>
+                                <div class="button-group-inline">
+                                    <button id="downloadImage" class="btn-icon" title="Download image">
+                                        ⬇️
+                                    </button>
+                                </div>
+                            </div>
+                            <img id="imagePreview" alt="Generated image preview" class="image-preview">
+                        </div>
+                    </div>
+
+                    <!-- Image to Text -->
+                    <div id="imageToText" class="image-section">
+                        <div class="form-group">
+                            <label>Upload Gambar untuk Analisis</label>
+                            <input type="file" id="uploadImage" accept="image/*" class="file-input">
+                        </div>
+
+                        <div id="uploadedImageContainer" class="output-container">
+                            <div class="output-header">
+                                <h3>Uploaded Image</h3>
+                            </div>
+                            <img id="uploadedImage" alt="Uploaded for analysis" class="image-preview">
+                        </div>
+
+                        <button id="analyzeImage" class="btn btn-primary">
+                            <span>🔍 Analyze Style</span>
+                        </button>
+
+                        <div id="styleOutput" class="output-container">
+                            <div class="output-header">
+                                <h3>Style Analysis</h3>
+                                <button id="copyStyle" class="btn-icon" title="Copy to clipboard">
+                                    📋
+                                </button>
+                            </div>
+                            <div id="styleText" class="output-text">
+                                <p class="placeholder">Style analysis will appear here...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History Section -->
+            <section class="section">
+                <div class="card">
+                    <h2>📜 History</h2>
+                    <div id="historyList" class="history-list">
+                        <p class="placeholder">No history yet...</p>
+                    </div>
+                    <button id="clearHistory" class="btn btn-secondary">
+                        <span>🗑️ Clear History</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Made with ❤️ for Content Creators</p>
+            <p>Works Offline • No Data Collection</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
